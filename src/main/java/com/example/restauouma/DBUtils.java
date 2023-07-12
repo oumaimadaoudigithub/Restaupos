@@ -132,7 +132,7 @@ public class DBUtils {
         ResultSet resultSet = null;
         try{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reataupos", "root", "");
-            preparedStatement = connection.prepareStatement("SELECT password WHERE username = ?");
+            preparedStatement = connection.prepareStatement("SELECT password FROM llx_user WHERE username = ?");
             preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
 

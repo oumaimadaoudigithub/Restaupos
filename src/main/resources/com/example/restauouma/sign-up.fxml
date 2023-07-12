@@ -59,7 +59,7 @@
                   <Font name="Arial Rounded MT Bold" size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="tf_email" layoutX="128.0" layoutY="134.0" onKeyPressed="#checkField" prefHeight="34.0" prefWidth="204.0" promptText="email" style="-fx-border-color: blue;">
+            <TextField fx:id="tf_email" layoutX="128.0" layoutY="134.0" onKeyPressed="#checkField" onKeyReleased="#checkField" prefHeight="34.0" prefWidth="204.0" promptText="email">
                <font>
                   <Font name="Arial Rounded MT Bold" size="18.0" />
                </font>
@@ -85,7 +85,7 @@
                   <Font name="Arial Rounded MT Bold" size="14.0" />
                </font>
             </Button>
-            <PasswordField fx:id="tf_password1" layoutX="128.0" layoutY="178.0" promptText="password">
+            <PasswordField fx:id="tf_password1" layoutX="128.0" layoutY="178.0" onKeyPressed="#checkPassword" onKeyReleased="#checkPassword" promptText="password">
                <font>
                   <Font name="Arial Rounded MT Bold" size="18.0" />
                </font>
