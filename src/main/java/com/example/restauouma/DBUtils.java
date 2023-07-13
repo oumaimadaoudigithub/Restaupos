@@ -9,6 +9,8 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class DBUtils {
@@ -143,8 +145,9 @@ public class DBUtils {
                 alert.show();
             }else {
                 while(resultSet.next()){
-                    String retrievedPassword = resultSet.getString("password");
-                    if (retrievedPassword.equals(password)) {
+                    String retrievedHashedPassword = resultSet.getString("password");
+                    String enteredHashedPassword = hashPassword(password);
+                    if (retrievedHashedPassword.equals(enteredHashedPassword)) {
                         changeScene(event, "logged-in.fxml", "welcome",username);
                     }else {
                         System.out.println("passwords did not match!");
@@ -181,6 +184,33 @@ public class DBUtils {
             }
         }
     }
+
+    public static String hashPassword(String password) {
+        try {
+            // Create MD5 MessageDigest instance
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Convert the password to bytes
+            byte[] passwordBytes = password.getBytes();
+
+            // Compute the hash value of the password
+            byte[] hashedBytes = md.digest(passwordBytes);
+
+            // Convert the hashed bytes to a hexadecimal string representation
+            StringBuilder sb = new StringBuilder();
+            for (byte hashedByte : hashedBytes) {
+                sb.append(Integer.toString((hashedByte & 0xff) + 0x100, 16).substring(1));
+            }
+
+            // Return the hashed password as a string
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }
 
 

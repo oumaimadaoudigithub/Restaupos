@@ -61,9 +61,11 @@ public class SignUpController implements Initializable {
             public void handle(ActionEvent event) {
                 if (validateFields()) {
                     String choiceName = mychoicebox.getValue();
+                    String hashedPassword = hashPassword(tf_password1.getText());
+                    String hashedConfirmPassword = hashPassword(tf_confirmpassword.getText());
 
                     DBUtils.signUpUser(event, tf_firstname.getText(), tf_lastname.getText(), tf_email.getText(),
-                            tf_username1.getText(), tf_password1.getText(), tf_confirmpassword.getText(), choiceName);
+                            tf_username1.getText(), hashedPassword, hashedConfirmPassword, choiceName);
                 }
             }
         });
@@ -136,6 +138,32 @@ public class SignUpController implements Initializable {
         }
         return p.matcher(passwordText).matches();
     }
+    public static String hashPassword(String password) {
+        try {
+            // Create MD5 MessageDigest instance
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Convert the password to bytes
+            byte[] passwordBytes = password.getBytes();
+
+            // Compute the hash value of the password
+            byte[] hashedBytes = md.digest(passwordBytes);
+
+            // Convert the hashed bytes to a hexadecimal string representation
+            StringBuilder sb = new StringBuilder();
+            for (byte hashedByte : hashedBytes) {
+                sb.append(Integer.toString((hashedByte & 0xff) + 0x100, 16).substring(1));
+            }
+
+            // Return the hashed password as a string
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private boolean validateFields() {
         String firstName = tf_firstname.getText().trim();
         String lastName = tf_lastname.getText().trim();
