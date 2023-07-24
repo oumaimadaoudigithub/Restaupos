@@ -13,24 +13,20 @@ import java.util.ResourceBundle;
 public class LoggedInController implements Initializable {
 
 
-    @FXML
-    private Button welcome_button;
+    public static String username;
+
+
+
 
     @FXML
-    private Label welcome_label;
+    private Label main_username;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        welcome_button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                DBUtils.changeScene(event, "sample.fxml", "register", null);
 
-            }
-        });
+
+
 
     }
-    public void setUserInformation(String username){
-       welcome_label.setText("Welcome  "+ username + " !");
-    }
+
 }

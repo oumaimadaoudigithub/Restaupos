@@ -37,31 +37,21 @@ public class DBUtils {
         }
     }
 
-    public static void changeScene(ActionEvent event, String fxmlFile, String title, String username){
+    public static void changeScene(ActionEvent event, String fxmlFile, String title){
         Parent root = null;
 
-        if (username != null){
-            try {
-                FXMLLoader loader = new FXMLLoader(DBUtils.class.getResource(fxmlFile));
-                root = loader.load();
-                LoggedInController loggedInController = loader.getController();
-                loggedInController.setUserInformation(username);
-
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-        } else {
-            try{
-                root = FXMLLoader.load(DBUtils.class.getResource(fxmlFile));
-            } catch (IOException e){
-                e.printStackTrace();
-            }
+        try {
+            FXMLLoader loader = new FXMLLoader(DBUtils.class.getResource(fxmlFile));
+            root = loader.load();
+        } catch (IOException e){
+            e.printStackTrace();
         }
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setTitle(title);
-        stage.setScene(new Scene(root,600,400));
+        stage.setScene(new Scene(root, 1100, 600));
         stage.show();
     }
+
     public static void signUpUser(ActionEvent event, String firstname, String lastname, String email, String username, String password, String confpassword, String job){
          Connection connection = null;
          PreparedStatement psInsert = null;
@@ -90,7 +80,7 @@ public class DBUtils {
                 psInsert.setString(7, job);
                 psInsert.executeUpdate();
 
-                changeScene(event, "logged-in.fxml", "welcome", username);
+                changeScene(event, "mainPage.fxml", "welcome");
 
 
             }
@@ -145,10 +135,11 @@ public class DBUtils {
                 alert.show();
             }else {
                 while(resultSet.next()){
+                    data.display_username = username;
                     String retrievedHashedPassword = resultSet.getString("password");
                     String enteredHashedPassword = hashPassword(password);
                     if (retrievedHashedPassword.equals(enteredHashedPassword)) {
-                        changeScene(event, "logged-in.fxml", "welcome",username);
+                        changeScene(event, "mainPage.fxml", "welcome");
                     }else {
                         System.out.println("passwords did not match!");
                         Alert alert = new Alert(Alert.AlertType.ERROR);
