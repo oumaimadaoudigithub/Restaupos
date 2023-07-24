@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.sql.*;
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
 public class cardProductController implements Initializable {
@@ -69,8 +69,8 @@ public class cardProductController implements Initializable {
     private double totalP;
     private double pr;
     public void addBtn(){
-        MainPageController mForm = new MainPageController();
-        mForm.customerID();
+        //MainPageController mForm = new MainPageController();
+        //mForm.customerID();
         qty = prodcard_spinner.getValue();
         String check = "";
         String checkAvailable = "SELECT status FROM llx_product WHERE prod_id ='"
@@ -98,6 +98,18 @@ public class cardProductController implements Initializable {
                 if (resultSet.next()){
                     CQTY = resultSet.getInt("quantite");
                 }
+                if (CQTY == 0){
+                    String updateQuantity = "UPDATE llx_product SET prod_name = '"
+                            + prodcard_name.getText()
+                            + "', price = '" + pr
+                            + "', quantite = 0, date = '" + date
+                            + "', image = '" + prod_image
+                            + "', status = 'Unavailable' WHERE prod_id = '"
+                            + prodID + "'";
+                    preparedStatement = connection.prepareStatement(updateQuantity);
+                    preparedStatement.executeUpdate();
+
+                }
                 if (CQTY < qty){
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error Message");
@@ -115,22 +127,24 @@ public class cardProductController implements Initializable {
                     totalP = (qty * pr);
                     preparedStatement.setString(4, String.valueOf(totalP));
 
-                    Date date = new Date();
+                    java.util.Date date = new java.util.Date();
                     java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-
 
                     preparedStatement.setString(5, String.valueOf(sqlDate));
                     preparedStatement.setString(6, data.display_username);
                     preparedStatement.executeUpdate();
                     int upQuantity = CQTY - qty;
                     prod_image = prod_image.replace("\\", "\\\\");
-                    String updateQuantity = "UPDATE llx_product SET prod_name = '"
-                            +prodcard_name.getText()+"', price = '"
-                            +pr+"', quantite = "
-                            +upQuantity+", date = '"+date+"', image = '"+prod_image+"', status = '"+check+"' WHERE prod_id = '"
-                            +prodID+"'";
-                    preparedStatement = connection.prepareStatement(updateQuantity);
-                    preparedStatement.executeUpdate();
+                    //System.out.println(date);
+                    //String updateQuantity = "UPDATE llx_product SET prod_name = '"
+                            //+prodcard_name.getText()+"', price = '"
+                            //+pr+"', quantite = "
+                            //+upQuantity+", date = '"+date+"', image = '"+prod_image+"', status = '"+check+"' WHERE prod_id = '"
+                            //+prodID+"'";
+
+                    //preparedStatement = connection.prepareStatement(updateQuantity);
+                    //preparedStatement.executeUpdate();
+
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);

@@ -524,7 +524,7 @@ public class MainPageController implements Initializable {
                     preparedStatement.setString(5, prod_Pttc.getText());
                     preparedStatement.setString(6, prod_tva.getText());
                     preparedStatement.setString(7, prod_Qty.getText());
-                    preparedStatement.setString(3, (String) prod_Status.getSelectionModel().getSelectedItem());
+
 
                     String path = data.path;
                     path = path.replace("\\", "\\\\");
@@ -532,7 +532,8 @@ public class MainPageController implements Initializable {
                     // to get current date
                     Date date = new Date();
                     java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-                    preparedStatement.setString(9, String.valueOf(sqlDate));
+                    preparedStatement.setDate(9, sqlDate);
+                    preparedStatement.setString(10, (String) prod_Status.getSelectionModel().getSelectedItem());
                     preparedStatement.executeUpdate();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
